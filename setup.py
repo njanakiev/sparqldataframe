@@ -46,5 +46,5 @@ setup(
     platforms='any',
     packages=['sparqldataframe'],
     include_package_data=True,
-    install_requires=["pandas", "requests"],
+    install_requires=["pandas", "requests", "simplejson"],
 )
