@@ -1,18 +1,31 @@
-from setuptools import find_packages, setup
-import os.path
+from setuptools import setup
+from pathlib import Path
 
 
-# The directory containing this file
-HERE = os.path.abspath(os.path.dirname(__file__))
+# Version number
+directory = Path(__file__).absolute().parent
+with open(directory / "sparqldataframe/__init__.py") as f:
+    for line in f:
+        if "__version__" in line:
+            version = line.split("=")[1].strip().strip('"').strip("'")
+            continue
 
 # The text of the README file
-with open(os.path.join(HERE, "README.rst")) as fid:
-    README = fid.read()
+with open(directory / "README.md") as f:
+    README = f.read()
+
+# Requirements
+try:
+    with open((directory / 'requirements.txt'), encoding='utf-8') as f:
+        requirements = f.readlines()
+    requirements = [line.strip() for line in requirements]
+except FileNotFoundError:
+    requirements = []
 
 # This call to setup() does all the work
 setup(
     name="sparqldataframe",
-    version="0.1.0",
+    version=version,
     description="Get a Pandas dataframe from SPARQL queries",
     long_description=README,
     url="https://github.com/njanakiev/sparqldataframe",
