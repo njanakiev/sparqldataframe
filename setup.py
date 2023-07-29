@@ -28,6 +28,7 @@ setup(
     version=version,
     description="Get a Pandas dataframe from SPARQL queries",
     long_description=README,
+    long_description_content_type='text/markdown',
     url="https://github.com/njanakiev/sparqldataframe",
     author="Nikolai Janakiev",
     author_email="nikolai.janakiev@gmail.com",
