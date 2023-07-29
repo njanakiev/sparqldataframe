@@ -1,4 +1,4 @@
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 import pandas as pd
 from simplejson import JSONDecodeError
@@ -17,7 +17,15 @@ def wikidata_query(sparql_query):
 
 def query(url, sparql_query):
     try:
-        r = requests.get(url, params={'format': 'json', 'query': sparql_query})
+        r = requests.get(
+            url,
+            params={
+                'format': 'json',
+                'query': sparql_query
+            },
+            headers={
+                "accept": "application/sparql-results+json"
+            })
         data = r.json()
     except JSONDecodeError as e:
         print(r.content)
