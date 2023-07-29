@@ -1,6 +1,4 @@
----
-title: sparqldataframe
----
+# sparqldataframe
 
 [![image](https://img.shields.io/pypi/v/sparqldataframe.svg)](https://pypi.python.org/pypi/sparqldataframe)
 
@@ -24,13 +22,22 @@ Here is an example how to run a SPARQL query on the
 import sparqldataframe
 
 sparql_query = """
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
 SELECT ?item ?itemLabel 
 WHERE {
   ?item wdt:P31 wd:Q146.
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
+  }
 }
 """
-df = sparqldataframe.query("https://query.wikidata.org/sparql", sparql_query)
+df = sparqldataframe.query(
+  "https://query.wikidata.org/sparql",
+  sparql_query)
 ```
 
 Wikidata and [DBPedia](http://dbpedia.org/) can be both used without
