@@ -1,9 +1,9 @@
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
-import pandas as pd
-from simplejson import JSONDecodeError
 import requests
-
+import pandas as pd
+from typing import Optional, Dict, Any
+from simplejson import JSONDecodeError
 
 DEFAULT_PREFIXES = """
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
@@ -26,17 +26,23 @@ PREFIX bd: <http://www.bigdata.com/rdf#>
 """
 
 
-def dbpedia_query(sparql_query):
+def dbpedia_query(sparql_query: str):
     url = 'http://dbpedia.org/sparql'
     return query(url, DEFAULT_PREFIXES + sparql_query)
 
 
-def wikidata_query(sparql_query):
+def wikidata_query(sparql_query: str):
     url = 'https://query.wikidata.org/sparql'
     return query(url, DEFAULT_PREFIXES + sparql_query)
 
 
-def query(url, sparql_query):
+def query(url: str, sparql_query: str, headers: Optional[Dict[str, str]] = None):
+    default_headers = {
+        "accept": "application/sparql-results+json"
+    }
+    if headers:
+        default_headers.update(headers)
+
     try:
         r = requests.get(
             url,
@@ -44,11 +50,10 @@ def query(url, sparql_query):
                 'format': 'json',
                 'query': sparql_query
             },
-            headers={
-                "accept": "application/sparql-results+json"
-            })
+            headers=default_headers)
+        r.raise_for_status()
         data = r.json()
-    except JSONDecodeError as e:
+    except JSONDecodeError:
         print(r.content)
         raise Exception('Invalid query')
 
